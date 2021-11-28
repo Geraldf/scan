@@ -1,13 +1,19 @@
-import logo from "./logo.svg";
-import "./App.css";
 import QrTest from "./components/QrTest";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Create from "./components/Create";
 
 function App() {
   return (
-    <div>
-      <h2>Karl Storz ScanPoint</h2>
-      <QrTest />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/">
+          <QrTest />
+        </Route>
+        <Route path="/create">
+          <Create />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

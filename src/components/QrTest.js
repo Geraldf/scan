@@ -1,37 +1,72 @@
-import React, { Component } from "react";
+import React, { useEffect, useState } from "react";
+
+import Typography from "@mui/material/Typography";
+import { makeStyles } from "@mui/material/styles";
+
+import Grid from "@mui/material/Grid";
 import QrReader from "react-qr-reader";
-import "./QrTest.css";
+import Layout from "./Layout";
+import { Card } from "@mui/material";
+import Paper from "@mui/material/Paper";
+import Container from "@mui/material/Container";
+import ResultCard from "./ResultCard";
 
-class QrTest extends Component {
-  state = {
-    result: "No result",
-  };
+const NoResult = {
+  id: 0,
+  Name: "Bitte Scannen",
+  ValidUntil: "01. Januar 1990",
+};
+const QrTest = () => {
+  const [Result, setResult] = useState(NoResult);
 
-  handleScan = (data) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setResult(NoResult);
+    }, 1000);
+  });
+
+  const handleScan = (data) => {
     if (data) {
-      const { Name, Dataum, Checksumme } = data;
-      this.setState({
-        result: data,
-      });
+      setResult(data);
     }
   };
-  handleError = (err) => {
+
+  const handleError = (err) => {
     console.error(err);
   };
-  render() {
-    return (
-      <div className="container">
-        <QrReader
-          delay={300}
-          facingMode="user"
-          onError={this.handleError}
-          onScan={this.handleScan}
-          style={{ width: "30%" }}
-        />
-        <p>{this.state.result}</p>
-      </div>
-    );
-  }
-}
+
+  const section = {
+    height: "90%",
+    backgroundColor: "#3254a8",
+  };
+
+  return (
+    <Layout>
+      <Container>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Card sx={{ minWidth: 275 }}>
+              <Paper>
+                <QrReader
+                  delay={300}
+                  facingMode="user"
+                  onError={handleError}
+                  onScan={handleScan}
+                  style={section}
+                />
+              </Paper>
+            </Card>
+          </Grid>
+
+          <Grid item xs={6}>
+            <Paper>
+              <ResultCard Result={Result}></ResultCard>
+            </Paper>
+          </Grid>
+        </Grid>
+      </Container>
+    </Layout>
+  );
+};
 
 export default QrTest;
